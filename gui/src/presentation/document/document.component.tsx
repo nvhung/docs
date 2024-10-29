@@ -1,6 +1,7 @@
-import { createRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Tags } from "./tags.component";
 import { Details } from "./details.component";
+import { mediateRequestDocument, mediateSubmitNewDocument } from "../../core/mediator";
 
 const FileRenderer = (props: any) => {
     const file: any = props.file;
@@ -12,6 +13,7 @@ const FileRenderer = (props: any) => {
 };
 
 export const Document = () => {
+    const [document, setDocument] = useState();
     const [files, setFiles] = useState<any>([]);
     const [details, setDetails] = useState<any>([]);
     const [tags, setTags] = useState<any>([]);
@@ -28,6 +30,10 @@ export const Document = () => {
         setTags(event.target.value);
     };
 
+    const handleSubmitDocument = (event) => {
+        mediateSubmitNewDocument(files);
+    };
+
     useEffect(() => {
         console.log(files);
         files.forEach((file: any) => {
@@ -35,22 +41,34 @@ export const Document = () => {
         });
     }, [files]);
 
+    useEffect(() => {
+        mediateRequestDocument(1, setDocument);
+    }, []);
+
+    useEffect(() => {
+        console.log('document', document);
+    }, [document])
+
     return (
         <div>
-            <form>
-                <div className="fw-bold mb-3 border-bottom">Files</div>
-                <div className="ms-3 mb-3">
+            <div className="fw-bold mb-3 border-bottom">Files</div>
+            <div className="ms-3 mb-3">
+                <form>
                     <input type="file" className="form-control mb-2 me-2" multiple onChange={handleMultipleChange} />
-                    <div>{files && files.map((e: any) => <FileRenderer file={e} />)}</div>
-                </div>
-                <div className="fw-bold mb-3 border-bottom">Details</div>
-                <Details className="ms-3 mb-3" details={details} onChange={handleDetailsChange} />
-                <div className="fw-bold mb-3 border-bottom">Tags</div>
-                <Tags className='ms-3 mb-3' tags={tags} onChange={handleTagsChange} />
-                <div className="text-end">
-                    <button type="submit" className={`btn btn-primary ${files.length > 0 ? '' : 'd-none'}`}>Submit</button>
-                </div>
-            </form>
+                    <div>
+                        {files && files.map((e, index) => <FileRenderer key={`file-${index}`} file={e} />)}
+                        <button 
+                            type="button" 
+                            className={`btn btn-primary ${files.length > 0 ? '' : 'd-none'}`}
+                            onClick={handleSubmitDocument}
+                        >Submit</button>
+                    </div>
+                </form>
+            </div>
+            <div className="fw-bold mb-3 border-bottom">Details</div>
+            <Details className="ms-3 mb-3" details={details} onChange={handleDetailsChange} />
+            <div className="fw-bold mb-3 border-bottom">Tags</div>
+            <Tags className='ms-3 mb-3' tags={tags} onChange={handleTagsChange} />
         </div>
     );
 };

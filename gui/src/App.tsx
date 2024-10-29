@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Search } from './presentation/search/search.component';
@@ -7,7 +7,7 @@ import { Document } from './presentation/document/document.component';
 import { Page } from './presentation/common/page.component';
 import { MainNavItem, MainNavItemPath } from './presentation/common/constants';
 
-const router = createBrowserRouter([
+const createRouter = () => createBrowserRouter([
   {
     path: MainNavItemPath[MainNavItem.SEARCH],
     element: <Page renderer={() => <Search />} />,
@@ -23,12 +23,14 @@ const router = createBrowserRouter([
 ]);
 
 export const App = () => {
+  const [router] = useState<any>(createRouter());
+
   return (
     <div>
       <header className='fs-5'>
         <label>DOCUMENTS</label>
       </header>
-      <RouterProvider router={router} />
+      {router && <RouterProvider router={router} />}
     </div>
   );
 }

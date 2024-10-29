@@ -17,9 +17,9 @@ export const MainNav = () => {
     const [activeItem, setActiveItem] = useState<any>(MainNavItem.SEARCH);
 
     useEffect(() => {
-        console.log(location);
+        console.log(location.pathname);
         setActiveItem(getActiveItem(location.pathname));
-    }, [location]);
+    }, [location, activeItem]);
 
     return (
         <div className='main-nav'>
