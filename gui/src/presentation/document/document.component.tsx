@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Tags } from "./tags.component";
 import { Details } from "./details.component";
-import { mediateRequestDocument, mediateSubmitNewDocument } from "../../core/mediator";
+import { mediateRequestDocument, mediateSubmitDocumentFiles, mediateSubmitNewDocument } from "../../core/mediator";
+import { Files } from "./files.component";
+import { useNavigate, useParams } from "react-router-dom";
 
 const FileRenderer = (props: any) => {
     const file: any = props.file;
@@ -13,7 +15,10 @@ const FileRenderer = (props: any) => {
 };
 
 export const Document = () => {
-    const [document, setDocument] = useState();
+    const params = useParams();
+    const navigate = useNavigate();
+    const documentName = params.name;
+    const [document, setDocument] = useState<any>();
     const [files, setFiles] = useState<any>([]);
     const [details, setDetails] = useState<any>([]);
     const [tags, setTags] = useState<any>([]);
@@ -31,7 +36,23 @@ export const Document = () => {
     };
 
     const handleSubmitDocument = (event) => {
-        mediateSubmitNewDocument(files);
+        mediateSubmitNewDocument(files, (res) => {});
+    };
+
+    const handleSelectFiles = (event) => {
+        if (document) {
+            mediateSubmitDocumentFiles(document.name, event.target.value, (res) => {
+                if (res.success) {
+                    mediateRequestDocument(documentName, setDocument);
+                }
+            });
+        } else {
+            mediateSubmitNewDocument(event.target.value, (res) => {
+                if (res.success) {
+                    navigate(`/document/${res.document.name}`);
+                }
+            });
+        }
     };
 
     useEffect(() => {
@@ -42,8 +63,8 @@ export const Document = () => {
     }, [files]);
 
     useEffect(() => {
-        mediateRequestDocument(1, setDocument);
-    }, []);
+        documentName && mediateRequestDocument(documentName, setDocument);
+    }, [documentName]);
 
     useEffect(() => {
         console.log('document', document);
@@ -51,20 +72,9 @@ export const Document = () => {
 
     return (
         <div>
+            <div className="fw-bold fs-4 mb-3">{document ? documentName : 'New Document'}</div>
             <div className="fw-bold mb-3 border-bottom">Files</div>
-            <div className="ms-3 mb-3">
-                <form>
-                    <input type="file" className="form-control mb-2 me-2" multiple onChange={handleMultipleChange} />
-                    <div>
-                        {files && files.map((e, index) => <FileRenderer key={`file-${index}`} file={e} />)}
-                        <button 
-                            type="button" 
-                            className={`btn btn-primary ${files.length > 0 ? '' : 'd-none'}`}
-                            onClick={handleSubmitDocument}
-                        >Submit</button>
-                    </div>
-                </form>
-            </div>
+            <Files className="ms-3 mb-3" document={document} onSelectFiles={handleSelectFiles} />
             <div className="fw-bold mb-3 border-bottom">Details</div>
             <Details className="ms-3 mb-3" details={details} onChange={handleDetailsChange} />
             <div className="fw-bold mb-3 border-bottom">Tags</div>

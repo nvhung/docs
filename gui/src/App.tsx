@@ -17,6 +17,10 @@ const createRouter = () => createBrowserRouter([
     element: <Page renderer={() => <Document />} />,
   },
   {
+    path: MainNavItemPath[MainNavItem.DOCUMENT] + '/:name',
+    element: <Page renderer={() => <Document />} />,
+  },
+  {
     path: MainNavItemPath[MainNavItem.TAGS],
     element: <Page renderer={() => <Tags />} />,
   },

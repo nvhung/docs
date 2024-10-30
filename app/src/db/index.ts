@@ -11,11 +11,23 @@ const documentNameSchema = new mongoose.Schema({
 
 const DocumentName = mongoose.model('DocumentName', documentNameSchema);
 
+const documentFileSchema = new mongoose.Schema({
+    name: {
+        type: String
+    },
+    mimetype: {
+        type: String
+    },
+    size: {
+        type: Number
+    }
+});
+
 const documentSchema = new mongoose.Schema({
     name: {
         type: String
     },
-    files: [{type: String}]
+    files: [documentFileSchema]
 });
 
 const Document = mongoose.model('Document', documentSchema);
@@ -40,4 +52,13 @@ export const getDocumentName = async ({date}) => {
 export const insertDocument = ({name, files}) => {
     const doc = new Document({name, files});
     doc.save();
-}
+};
+
+export const findDocument = async ({name}) => {
+    return await Document.findOne({name});
+};
+
+export const updateDocumentFiles = async ({name, files}) => {
+    const doc = await findDocument({name});
+    await Document.updateOne({name}, {$set: {files}});
+};

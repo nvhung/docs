@@ -10,6 +10,9 @@ const app = Fastify({
 connectToDb();
 
 app.register(require('@fastify/multipart'));
+app.register(require('@fastify/static'), {
+    root: process.env.DATA_DIR
+});
 app.register(documentRoutes);
 
 app.listen({port}, (err) => {
