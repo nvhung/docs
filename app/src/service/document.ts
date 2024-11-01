@@ -4,7 +4,7 @@ import { mkdir, stat, readdir, unlink } from 'node:fs/promises';
 import { pipeline } from 'node:stream/promises';
 import * as moment from 'moment';
 import * as db from '../db';
-import { getDocumentDirectory } from '../util';
+import { equals, getDocumentDirectory } from '../util';
 
 export const createDocument = async (files) => {
     const date = moment().format('YYYY.MM.DD');
@@ -41,4 +41,20 @@ export const updateDocumentFiles = async ({name, files}) => {
 
 export const getDocument = async ({name}) => {
     return await db.findDocument({name});
+};
+
+export const updateDocumentDetail = async ({name, detail}) => {
+    const doc = await getDocument({name});
+    let details: any = doc.details;
+    let changed = false;
+    for (let i = 0; i < details.length; i++) {
+        if (details[i].name === detail.name) {
+            details[i].value = detail.value;
+            changed = true;
+        }
+    }
+    if (!changed) {
+        details = [...details, detail];
+    }
+    await db.updateDocumentDetails({name, details});
 };

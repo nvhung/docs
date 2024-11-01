@@ -1,5 +1,5 @@
 import { encode } from 'urlencode';
-import { createDocument, getDocument, updateDocumentFiles } from "../service";
+import { createDocument, getDocument, updateDocumentDetail, updateDocumentFiles } from "../service";
 import { getDocumentDirectory } from '../util';
 
 export const documentRoutes = (app, options) => {
@@ -31,6 +31,11 @@ export const documentRoutes = (app, options) => {
                 mimetype: e.mimetype,
                 size: e.size,
                 url: `/api/document/${doc.name}/${encode(e.name)}`
+            })),
+            details: (doc.details || []).map((e) => ({
+                name: e.name,
+                type: e.type,
+                value: e.value
             }))
         });
     });
@@ -43,5 +48,17 @@ export const documentRoutes = (app, options) => {
         const docDir = getDocumentDirectory(docName);
         const filePath = `${docDir}/${fileName}`;
         return reply.sendFile(filePath);
+    });
+
+    app.put('/api/document/:name/detail', {}, async (request, reply) => {
+        const docName = request.params.name;
+        console.log(`Update document ${docName} detail ${JSON.stringify(request.body)}`);
+        updateDocumentDetail({
+            name: docName,
+            detail: request.body
+        })
+        reply.send({
+            success: true
+        });
     });
 };

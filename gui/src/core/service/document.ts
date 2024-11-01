@@ -17,3 +17,8 @@ export const updateDocumentFiles = ({name, files}) => {
     });
     return put(`/api/document/${name}/files`, formData);
 };
+
+export const submitDocumentDetail = ({name, detail}) => {
+    return put(`/api/document/${name}/detail`, detail);
+};
+

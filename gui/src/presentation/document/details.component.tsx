@@ -1,8 +1,11 @@
 import { createRef, useEffect, useState } from "react";
-import { createEvent } from "../common/utils";
+import { mediateRequestDocument, mediateSubmitDocumentDetail } from "../../core/mediator";
+import { useDispatch, useSelector } from "react-redux";
+import { selectDocument } from "../../core/store/document.state";
 
 const emptyDetail = {
     name: '',
+    type: 'string',
     value: ''
 };
 
@@ -15,8 +18,10 @@ const Detail = (props: any) => {
     );
 };
 
-export const Details = (props: any) => {
-    const [details, setDetails] = useState<any>(props.details);
+export const Details = ({className = ''}) => {
+    const dispatch = useDispatch<any>();
+    const document = useSelector(selectDocument);
+    const [details, setDetails] = useState<any>([]);
     const [detail, setDetail] = useState<any>(emptyDetail);
     const detailNameRef = createRef<any>();
 
@@ -35,26 +40,25 @@ export const Details = (props: any) => {
     };
 
     const handleClickAddDetail = (event: any) => {
-        setDetails([...details, detail]);
+        dispatch(mediateSubmitDocumentDetail(document.name, detail, () => {
+            dispatch(mediateRequestDocument(document.name));
+        }));
         setDetail(emptyDetail);
         detailNameRef.current.focus();
     };
 
     useEffect(() => {
-        props.onChange && props.onChange(createEvent({
-            id: 'details',
-            value: details
-        }));
-    }, [details, props]);
+        document && setDetails(document.details || []);
+    }, [document]);
 
     return (
-        <div className={props.className}>
+        <div className={className}>
             <label className="form-label">Name</label>
             <input type="text" className="form-control" value={detail.name} onChange={handleDetailNameChange} ref={detailNameRef} />
             <label className="form-label">Value</label>
             <input type="text" className="form-control" value={detail.value} onChange={handleDetailValueChange} />
             <div className="mt-2">
-                <button type="button" className="btn btn-secondary" onClick={handleClickAddDetail}>Add</button>
+                <button type="button" className="btn btn-secondary" onClick={handleClickAddDetail}>Add or Update</button>
             </div>
             <div className='mt-2'>
                 {details.map((e: any) => <Detail detail={e} />)}

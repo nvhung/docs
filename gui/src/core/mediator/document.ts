@@ -1,17 +1,27 @@
-import { createDocument, getDocument, updateDocumentFiles } from "../service";
-import { post } from "../service/request";
+import { 
+    createDocument, 
+    getDocument, 
+    submitDocumentDetail, 
+    updateDocumentFiles 
+} from "../service";
+import { createUpdateDocumentAction } from "../store/document.state";
 
-export const mediateRequestDocument = async (id, setter) => {
-    const document = await getDocument(id);
-    setter(document);
+export const mediateRequestDocument = (name) => async (dispatch) => {
+    const document = await getDocument(name);
+    document && dispatch(createUpdateDocumentAction(document));
 };
 
-export const mediateSubmitNewDocument = async (files, callback) => {
+export const mediateSubmitNewDocument = (name, files, callback) => async (dispatch) => {
     const res = await createDocument(files);
-    callback(res);
+    res && res.success && callback(res);
 };
 
-export const mediateSubmitDocumentFiles = async (name, files, callback) => {
+export const mediateSubmitDocumentFiles = (name, files, callback) => async (dispatch) => {
     const res = await updateDocumentFiles({name, files});
-    callback(res);
+    res && res.success && callback(res);
+};
+
+export const mediateSubmitDocumentDetail = (name, detail, callback) => async (dispatch) => {
+    const res = await submitDocumentDetail({name, detail});
+    res && res.success && callback(res);
 };
