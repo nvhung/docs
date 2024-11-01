@@ -1,5 +1,5 @@
 import { encode } from 'urlencode';
-import { createDocument, getDocument, removeDocumentDetail, updateDocumentDetail, updateDocumentFiles } from "../service";
+import { createDocument, getDocument, removeDocumentDetail, updateDocumentDetail, updateDocumentFiles, updateDocumentTags } from "../service";
 import { getDocumentDirectory } from '../util';
 
 export const documentRoutes = (app, options) => {
@@ -36,7 +36,8 @@ export const documentRoutes = (app, options) => {
                 name: e.name,
                 type: e.type,
                 value: e.value
-            }))
+            })),
+            tags: doc.tags
         });
     });
 
@@ -69,6 +70,19 @@ export const documentRoutes = (app, options) => {
         removeDocumentDetail({
             docName,
             detailName
+        });
+        reply.send({
+            success: true
+        });
+    });
+
+    app.post('/api/document/:name/tags', {}, async (request, reply) => {
+        const docName = request.params.name;
+        console.log(`Add/remove document ${docName} tag ${JSON.stringify(request.body)}`);
+        updateDocumentTags({
+            docName,
+            tag: request.body.tag,
+            action: request.body.action
         });
         reply.send({
             success: true

@@ -4,7 +4,8 @@ module.exports = function (app) {
     const proxy = createProxyMiddleware({
         target: 'http://localhost:8000',
         changeOrigin: true,
-        secure: false
+        secure: false,
+        logger: console
     });
     
     app.post('/api/*', proxy);

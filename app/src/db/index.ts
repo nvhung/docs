@@ -40,7 +40,10 @@ const documentSchema = new mongoose.Schema({
         type: String
     },
     files: [documentFileSchema],
-    details: [documentDetailSchema]
+    details: [documentDetailSchema],
+    tags: [{
+        type: String
+    }]
 });
 
 const Document = mongoose.model('Document', documentSchema);
@@ -81,3 +84,7 @@ export const updateDocumentDetails = async ({name, details}) => {
     await Document.updateOne({name}, {$set: {details}});
 };
 
+export const updateDocumentTags = async ({name, tags}) => {
+    const doc = await findDocument({name});
+    await Document.updateOne({name}, {$set: {tags}});
+};

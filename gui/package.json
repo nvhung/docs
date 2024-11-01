@@ -22,7 +22,10 @@
     "postcss-scss": "4.0.9",
     "@reduxjs/toolkit": "2.3.0",
     "react-redux": "9.1.2",
-    "redux-logger": "3.0.6"
+    "redux-logger": "3.0.6",
+    "@fortawesome/fontawesome-svg-core": "6.6.0",
+    "@fortawesome/react-fontawesome": "0.2.2",
+    "@fortawesome/free-solid-svg-icons": "6.6.0"
   },
   "devDependencies": {
     "http-proxy-middleware": "3.0.3"

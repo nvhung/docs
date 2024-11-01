@@ -26,3 +26,6 @@ export const removeDocumentDetail = ({docName, detailName}) => {
     return del(`/api/document/${docName}/detail/${detailName}`);
 };
 
+export const updateDocumentTags = ({docName, tag, action}) => {
+    return post(`/api/document/${docName}/tags`, {docName, tag, action});
+};

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Tags } from "./tags.component";
 import { Details } from "./details.component";
 import { 
@@ -17,11 +17,6 @@ export const Document = () => {
     const dispatch = useDispatch<any>();
     const documentName = params.name;
     const document = useSelector(selectDocument);
-    const [tags, setTags] = useState<any>([]);
-
-    const handleTagsChange = (event: any) => {
-        setTags(event.target.value);
-    };
 
     const handleSelectFiles = (event) => {
         if (document && document.name) {
@@ -51,7 +46,7 @@ export const Document = () => {
             <div className="fw-bold mb-3 border-bottom">Details</div>
             <Details className="ms-3 mb-3" />
             <div className="fw-bold mb-3 border-bottom">Tags</div>
-            <Tags className='ms-3 mb-3' tags={tags} onChange={handleTagsChange} />
+            <Tags className='ms-3 mb-3' />
         </div>
     );
 };

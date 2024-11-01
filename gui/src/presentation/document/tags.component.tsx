@@ -1,13 +1,28 @@
 import { createRef, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectDocument } from "../../core/store/document.state";
+import { mediateRequestDocument, mediateUpdateDocumentTags } from "../../core/mediator";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRemove } from "@fortawesome/free-solid-svg-icons";
 import { createEvent } from "../common/utils";
 
-const Tag = (props: any) => {
+const Tag = ({tag, onRemove}) => {
+    const handleClickRemove = (tag) => (event) => {
+        onRemove(createEvent({id: 'tag', value: tag}));
+    };
     return (
-        <div className="d-inline-block px-2 py-1 me-2 border rounded-2 bg-success-subtle">{props.tag}</div>
+        <div className="d-inline-block px-2 py-1 me-2 border rounded-2 bg-success-subtle">
+            {tag}
+            <button type="button" className="btn p-0 ms-2 text-danger" onClick={handleClickRemove(tag)}>
+                <FontAwesomeIcon icon={faRemove} />
+            </button>
+        </div>
     );
 };
 
 export const Tags = (props: any) => {
+    const dispatch = useDispatch<any>();
+    const document = useSelector(selectDocument);
     const [tags, setTags] = useState<any>([]);
     const [tag, setTag] = useState<any>('');
     const tagRef = createRef<any>();
@@ -17,17 +32,36 @@ export const Tags = (props: any) => {
     };
 
     const handleClickAddTag = (event: any) => {
-        setTags([...tags, tag]);
-        setTag('');
-        tagRef.current.focus();
+        dispatch(mediateUpdateDocumentTags({
+            docName: document.name,
+            tag,
+            action: 'add',
+            callback: (res) => {
+                if (res && res.success) {
+                    dispatch(mediateRequestDocument(document.name));
+                    setTag('');
+                    tagRef.current.focus();
+                }
+            }
+        }));
+    };
+
+    const handleRemoveTag = (event) => {
+        dispatch(mediateUpdateDocumentTags({
+            docName: document.name,
+            tag: event.target.value,
+            action: 'remove',
+            callback: (res) => {
+                if (res && res.success) {
+                    dispatch(mediateRequestDocument(document.name));
+                }
+            }
+        }));
     };
 
     useEffect(() => {
-        props.onChange && props.onChange(createEvent({
-            id: tags,
-            value: tags
-        }));
-    }, [tags, props]);
+        setTags(document.tags || []);
+    }, [document]);
 
     return (
         <div className={props.className}>
@@ -37,7 +71,7 @@ export const Tags = (props: any) => {
                 <button type="button" className="btn btn-secondary" onClick={handleClickAddTag}>Add</button>
             </div>
             <div className='mt-2'>
-            {props.tags && props.tags.map((e: any) => <Tag tag={e} />)}
+            {tags.map((e: any) => <Tag tag={e} onRemove={handleRemoveTag} />)}
             </div>
         </div>
     );

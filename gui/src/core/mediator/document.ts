@@ -3,7 +3,8 @@ import {
     getDocument, 
     removeDocumentDetail, 
     submitDocumentDetail, 
-    updateDocumentFiles 
+    updateDocumentFiles, 
+    updateDocumentTags
 } from "../service";
 import { createUpdateDocumentAction } from "../store/document.state";
 
@@ -29,5 +30,10 @@ export const mediateSubmitDocumentDetail = (name, detail, callback) => async (di
 
 export const mediateRemoveDocumentDetail = (docName, detailName, callback) => async (dispatch) => {
     const res = await removeDocumentDetail({docName, detailName});
+    res && res.success && callback(res);
+};
+
+export const mediateUpdateDocumentTags = ({docName, tag, action, callback}) => async (dispatch) => {
+    const res = await updateDocumentTags({docName, tag, action});
     res && res.success && callback(res);
 };
