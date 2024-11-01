@@ -1,6 +1,7 @@
 import { 
     createDocument, 
     getDocument, 
+    removeDocumentDetail, 
     submitDocumentDetail, 
     updateDocumentFiles 
 } from "../service";
@@ -23,5 +24,10 @@ export const mediateSubmitDocumentFiles = (name, files, callback) => async (disp
 
 export const mediateSubmitDocumentDetail = (name, detail, callback) => async (dispatch) => {
     const res = await submitDocumentDetail({name, detail});
+    res && res.success && callback(res);
+};
+
+export const mediateRemoveDocumentDetail = (docName, detailName, callback) => async (dispatch) => {
+    const res = await removeDocumentDetail({docName, detailName});
     res && res.success && callback(res);
 };

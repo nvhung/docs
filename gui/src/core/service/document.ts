@@ -1,4 +1,4 @@
-import { get, post, put } from "./request";
+import { del, get, post, put } from "./request";
 
 export const getDocument = async (id: any) => get(`/api/document/${id}`);
 
@@ -20,5 +20,9 @@ export const updateDocumentFiles = ({name, files}) => {
 
 export const submitDocumentDetail = ({name, detail}) => {
     return put(`/api/document/${name}/detail`, detail);
+};
+
+export const removeDocumentDetail = ({docName, detailName}) => {
+    return del(`/api/document/${docName}/detail/${detailName}`);
 };
 

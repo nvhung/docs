@@ -3,6 +3,11 @@ export const get = async (url) => {
     return await resp.json();
 };
 
+export const del = async (url) => {
+    const resp = await fetch(url, { method: 'DELETE' });
+    return await resp.json();
+};
+
 const getContentType = (data): any => {
     if (data instanceof FormData) {
         return {};

@@ -58,3 +58,17 @@ export const updateDocumentDetail = async ({name, detail}) => {
     }
     await db.updateDocumentDetails({name, details});
 };
+
+export const removeDocumentDetail = async ({docName, detailName}) => {
+    const doc = await getDocument({name: docName});
+    let details: any = doc.details;
+    let newDetails = [];
+    let changed = false;
+    for (let i = 0; i < details.length; i++) {
+        if (details[i].name !== detailName) {
+            newDetails = [...newDetails, details[i]]
+            changed = true;
+        }
+    }
+    changed && await db.updateDocumentDetails({name: docName, details: newDetails});
+};

@@ -1,5 +1,5 @@
 import { encode } from 'urlencode';
-import { createDocument, getDocument, updateDocumentDetail, updateDocumentFiles } from "../service";
+import { createDocument, getDocument, removeDocumentDetail, updateDocumentDetail, updateDocumentFiles } from "../service";
 import { getDocumentDirectory } from '../util';
 
 export const documentRoutes = (app, options) => {
@@ -56,7 +56,20 @@ export const documentRoutes = (app, options) => {
         updateDocumentDetail({
             name: docName,
             detail: request.body
-        })
+        });
+        reply.send({
+            success: true
+        });
+    });
+
+    app.delete('/api/document/:name/detail/:detail', {}, async (request, reply) => {
+        const docName = request.params.name;
+        const detailName = request.params.detail;
+        console.log(`Remove document ${docName} detail ${detailName}`);
+        removeDocumentDetail({
+            docName,
+            detailName
+        });
         reply.send({
             success: true
         });
