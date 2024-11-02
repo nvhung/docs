@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Search } from './presentation/search/search.component';
@@ -29,12 +29,16 @@ const createRouter = () => createBrowserRouter([
 export const App = () => {
   const [router] = useState<any>(createRouter());
 
+  useEffect(() => {
+    console.log('initialize application');
+  }, []);
+
   return (
-    <div>
+    <>
       <header className='fs-5'>
         <label>DOCUMENTS</label>
       </header>
       {router && <RouterProvider router={router} />}
-    </div>
+    </>
   );
 }

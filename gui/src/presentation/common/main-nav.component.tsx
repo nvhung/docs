@@ -4,7 +4,6 @@ import { MainNavItem, MainNavItemPath } from "./constants";
 
 const getActiveItem = (pathname: any) => {
     for (const item in MainNavItemPath) {
-        console.log(pathname, item, MainNavItemPath[item]);
         if (pathname.startsWith(MainNavItemPath[item])) {
             return item;
         }
@@ -17,7 +16,6 @@ export const MainNav = () => {
     const [activeItem, setActiveItem] = useState<any>(MainNavItem.SEARCH);
 
     useEffect(() => {
-        console.log(location.pathname);
         setActiveItem(getActiveItem(location.pathname));
     }, [location, activeItem]);
 

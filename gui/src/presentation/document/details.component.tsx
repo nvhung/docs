@@ -78,7 +78,7 @@ export const Details = ({className = ''}) => {
                 <button type="button" className="btn btn-secondary" onClick={handleClickRemoveDetail}>Remove</button>
             </div>
             <div className='mt-2'>
-                {details.map((e: any) => <Detail detail={e} onClick={handleClickDetail} />)}
+                {details.map((e, index) => <Detail key={`tag-${index}`} detail={e} onClick={handleClickDetail} />)}
             </div>
         </div>
     );

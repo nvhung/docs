@@ -71,7 +71,7 @@ export const Tags = (props: any) => {
                 <button type="button" className="btn btn-secondary" onClick={handleClickAddTag}>Add</button>
             </div>
             <div className='mt-2'>
-            {tags.map((e: any) => <Tag tag={e} onRemove={handleRemoveTag} />)}
+            {tags.map((e, index) => <Tag key={`tag-${index}`} tag={e} onRemove={handleRemoveTag} />)}
             </div>
         </div>
     );
