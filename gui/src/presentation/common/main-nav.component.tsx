@@ -26,6 +26,9 @@ export const MainNav = () => {
                 <a className={`nav-link ${activeItem === MainNavItem.SEARCH ? 'active' : ''}`} href={MainNavItemPath[MainNavItem.SEARCH]}>Search</a>
             </li>
             <li className="nav-item">
+                <a className={`nav-link ${activeItem === MainNavItem.DASHBOARD ? 'active' : ''}`} href={MainNavItemPath[MainNavItem.DASHBOARD]}>Dashboard</a>
+            </li>
+            <li className="nav-item">
                 <a className={`nav-link ${activeItem === MainNavItem.DOCUMENT ? 'active' : ''}`} href={MainNavItemPath[MainNavItem.DOCUMENT]}>Document</a>
             </li>
             <li className="nav-item">

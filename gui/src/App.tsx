@@ -6,6 +6,8 @@ import { Tags } from './presentation/tags/tags.component';
 import { Document } from './presentation/document/document.component';
 import { Page } from './presentation/common/page.component';
 import { MainNavItem, MainNavItemPath } from './presentation/common/constants';
+import { Dashboard } from './presentation/dashboard/dashboard.component';
+import { DocumentView } from './presentation/document/document-view.component';
 
 const createRouter = () => createBrowserRouter([
   {
@@ -13,11 +15,23 @@ const createRouter = () => createBrowserRouter([
     element: <Page renderer={() => <Search />} />,
   },
   {
+    path: MainNavItemPath[MainNavItem.DASHBOARD],
+    element: <Page renderer={() => <Dashboard />} />,
+  },
+  {
     path: MainNavItemPath[MainNavItem.DOCUMENT],
     element: <Page renderer={() => <Document />} />,
   },
   {
+    path: MainNavItemPath[MainNavItem.DOCUMENT] + '/create',
+    element: <Page renderer={() => <Document />} />,
+  },
+  {
     path: MainNavItemPath[MainNavItem.DOCUMENT] + '/:name',
+    element: <Page renderer={() => <DocumentView />} />,
+  },
+  {
+    path: MainNavItemPath[MainNavItem.DOCUMENT] + '/:name/edit',
     element: <Page renderer={() => <Document />} />,
   },
   {

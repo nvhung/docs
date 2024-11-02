@@ -3,6 +3,7 @@ import { formatBytes } from "../common/utils";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { mediateRequestDocument, mediateSubmitDocumentFiles, mediateSubmitNewDocument } from "../../core/mediator";
+import { ComponentMode } from "../common/constants";
 
 const FileRenderer = ({docName, file}) => {
     return (
@@ -10,7 +11,7 @@ const FileRenderer = ({docName, file}) => {
     );
 };
 
-export const Files = ({document, className = ''}) => {
+export const Files = ({document, className = '', mode = ComponentMode.EDIT}) => {
     const dispatch = useDispatch<any>();
     const navigate = useNavigate();
     const fileRef = useRef<any>();
@@ -38,14 +39,16 @@ export const Files = ({document, className = ''}) => {
 
     return (
         <div className={className}>
-            <button 
-                type='button' 
-                className='btn btn-secondary me-3'
-                onClick={handleClickChooseAndUploadFiles}
-            >Choose and upload files</button>
-            <form className="d-none">
-                <input type="file" ref={fileRef} className="form-control mb-2 me-2" multiple onChange={handleFilesChange} />
-            </form>
+            {mode === ComponentMode.EDIT && (<>
+                <button 
+                    type='button' 
+                    className='btn btn-secondary me-3'
+                    onClick={handleClickChooseAndUploadFiles}
+                >Choose and upload files</button>
+                <form className="d-none">
+                    <input type="file" ref={fileRef} className="form-control mb-2 me-2" multiple onChange={handleFilesChange} />
+                </form>
+            </>)}
             {document && document.files && document.files.map((e, index) => <FileRenderer key={`file-${index}`} docName={document.name} file={e} />)}
         </div>
     );

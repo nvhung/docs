@@ -9,15 +9,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createUpdateDocumentAction, selectDocument } from "../../core/store/document.state";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCancel, faPlus, faTrash, faUndo } from "@fortawesome/free-solid-svg-icons";
 import { equals } from '../../core/utils';
-
-const Section = ({label, visible = true, children}) => (
-    <>
-    {visible && <div className="fw-bold mb-3 border-bottom">{label}</div>}
-    {visible && children}
-    </>
-);
+import { Section } from "./section.component";
 
 export const Document = () => {
     const params = useParams();
@@ -26,7 +20,19 @@ export const Document = () => {
     const [documentName, setDocumentName] = useState<any>();
     const document = useSelector(selectDocument);
 
-    const handleClickCreateDocument = (event) => {
+    const handleClickCreate = (event) => {
+        navigate('/document');
+    };
+
+    const handleClickCancel = (event) => {
+        if (documentName) {
+            navigate(`/document/${documentName}`);
+        } else {
+            navigate('/document');
+        }
+    };
+
+    const handleClickDelete = (event) => {
         navigate('/document');
     };
 
@@ -50,13 +56,17 @@ export const Document = () => {
         <div>
             <div className="fw-bold fs-4 mb-3 d-flex">
                 <label className="flex-fill">{document && document.name ? document.name : 'New Document'}</label>
-                <button type="button" className={`btn btn-success me-2 ${documentName ? '' : 'd-none'}`} onClick={handleClickCreateDocument}>
-                    <FontAwesomeIcon icon={faPlus} className="me-1" />
-                    Create New Document
+                <button type="button" className={`btn btn-success me-2 ${documentName ? '' : 'd-none'}`} onClick={handleClickCancel}>
+                    <FontAwesomeIcon icon={faUndo} className="me-1" />
+                    Cancel
                 </button>
-                <button type="button" disabled={true} className={`btn btn-success ${documentName ? '' : 'd-none'}`} onClick={handleClickCreateDocument}>
+                <button type="button" className={`btn btn-success me-2 ${documentName ? '' : 'd-none'}`} onClick={handleClickCreate}>
+                    <FontAwesomeIcon icon={faPlus} className="me-1" />
+                    Create
+                </button>
+                <button type="button" disabled={true} className={`btn btn-success ${documentName ? '' : 'd-none'}`} onClick={handleClickDelete}>
                     <FontAwesomeIcon icon={faTrash} className="me-1" />
-                    Delete Document
+                    Delete
                 </button>
             </div>
             <Section label='Files'>

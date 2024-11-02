@@ -5,22 +5,28 @@ import { mediateRequestDocument, mediateUpdateDocumentTags } from "../../core/me
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRemove } from "@fortawesome/free-solid-svg-icons";
 import { createEvent } from "../common/utils";
+import { ComponentMode } from "../common/constants";
 
-const Tag = ({tag, onRemove}) => {
+const Tag = ({tag, onRemove, mode}) => {
     const handleClickRemove = (tag) => (event) => {
         onRemove(createEvent({id: 'tag', value: tag}));
     };
     return (
-        <div className="d-inline-block px-2 py-1 me-2 border rounded-2 bg-success-subtle">
-            {tag}
-            <button type="button" className="btn p-0 ms-2 text-danger" onClick={handleClickRemove(tag)}>
-                <FontAwesomeIcon icon={faRemove} />
-            </button>
-        </div>
+        <>
+        {mode === ComponentMode.EDIT && (<>
+            <div className="d-inline-block px-2 py-1 me-2 border rounded-2 bg-success-subtle">
+                {tag}
+                <button type="button" className="btn p-0 ms-2 text-danger" onClick={handleClickRemove(tag)}>
+                    <FontAwesomeIcon icon={faRemove} />
+                </button>
+            </div>
+        </>)}
+        {mode === ComponentMode.VIEW && <div className='d-inline-block bg-info-subtle me-2 px-2 py-1 border rounded-2'>{tag}</div>}
+        </>
     );
 };
 
-export const Tags = (props: any) => {
+export const Tags = ({className = '', mode = ComponentMode.EDIT}) => {
     const dispatch = useDispatch<any>();
     const document = useSelector(selectDocument);
     const [tags, setTags] = useState<any>([]);
@@ -64,14 +70,16 @@ export const Tags = (props: any) => {
     }, [document]);
 
     return (
-        <div className={props.className}>
-            <label className="form-label">Label</label>
-            <input type="text" className="form-control" value={tag} onChange={handleTagChange} ref={tagRef} />
-            <div className="mt-2">
-                <button type="button" className="btn btn-secondary" onClick={handleClickAddTag}>Add</button>
-            </div>
+        <div className={className}>
+            {mode === ComponentMode.EDIT && (<>
+                <label className="form-label">Label</label>
+                <input type="text" className="form-control" value={tag} onChange={handleTagChange} ref={tagRef} />
+                <div className="mt-2">
+                    <button type="button" className="btn btn-secondary" onClick={handleClickAddTag}>Add</button>
+                </div>
+            </>)}
             <div className='mt-2'>
-            {tags.map((e, index) => <Tag key={`tag-${index}`} tag={e} onRemove={handleRemoveTag} />)}
+            {tags.map((e, index) => <Tag key={`tag-${index}`} tag={e} mode={mode} onRemove={handleRemoveTag} />)}
             </div>
         </div>
     );

@@ -3,6 +3,7 @@ import { mediateRemoveDocumentDetail, mediateRequestDocument, mediateSubmitDocum
 import { useDispatch, useSelector } from "react-redux";
 import { selectDocument } from "../../core/store/document.state";
 import { createEvent } from "../common/utils";
+import { ComponentMode } from "../common/constants";
 
 const emptyDetail = {
     name: '',
@@ -10,15 +11,18 @@ const emptyDetail = {
     value: ''
 };
 
-const Detail = ({detail, onClick}) => {
+const Detail = ({detail, onClick, mode}) => {
     const {name, value} = detail;
     const handleClick = (event) => onClick(createEvent({id: 'detail', value: detail}));
     return (
-        <button className="btn btn-light me-2 px-2 py-1" onClick={handleClick}>{name} = {value}</button>
+        <>
+        {mode === ComponentMode.EDIT && <button className="btn btn-light me-2 px-2 py-1" onClick={handleClick}>{name} = {value}</button>}
+        {mode === ComponentMode.VIEW && <div className='d-inline-block bg-info-subtle me-2 px-2 py-1 border rounded-2'>{name} = {value}</div>}
+        </>
     );
 };
 
-export const Details = ({className = ''}) => {
+export const Details = ({className = '', mode = ComponentMode.EDIT}) => {
     const dispatch = useDispatch<any>();
     const document = useSelector(selectDocument);
     const [details, setDetails] = useState<any>([]);
@@ -69,16 +73,18 @@ export const Details = ({className = ''}) => {
 
     return (
         <div className={className}>
-            <label className="form-label">Name</label>
-            <input type="text" className="form-control" value={detail.name} onChange={handleDetailNameChange} ref={detailNameRef} />
-            <label className="form-label">Value</label>
-            <input type="text" className="form-control" value={detail.value} onChange={handleDetailValueChange} ref={detailValueRef} />
-            <div className="mt-2">
-                <button type="button" className="btn btn-secondary me-2" onClick={handleClickAddDetail}>Add or Update</button>
-                <button type="button" className="btn btn-secondary" onClick={handleClickRemoveDetail}>Remove</button>
-            </div>
+            {mode === ComponentMode.EDIT && (<>
+                <label className="form-label">Name</label>
+                <input type="text" className="form-control" value={detail.name} onChange={handleDetailNameChange} ref={detailNameRef} />
+                <label className="form-label">Value</label>
+                <input type="text" className="form-control" value={detail.value} onChange={handleDetailValueChange} ref={detailValueRef} />
+                <div className="mt-2">
+                    <button type="button" className="btn btn-secondary me-2" onClick={handleClickAddDetail}>Add or Update</button>
+                    <button type="button" className="btn btn-secondary" onClick={handleClickRemoveDetail}>Remove</button>
+                </div>
+            </>)}
             <div className='mt-2'>
-                {details.map((e, index) => <Detail key={`tag-${index}`} detail={e} onClick={handleClickDetail} />)}
+                {details.map((e, index) => <Detail key={`tag-${index}`} detail={e} mode={mode} onClick={handleClickDetail} />)}
             </div>
         </div>
     );
