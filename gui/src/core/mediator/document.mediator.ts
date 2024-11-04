@@ -2,15 +2,26 @@ import {
     createDocument, 
     getDocument, 
     removeDocumentDetail, 
+    searchDocument, 
     submitDocumentDetail, 
     updateDocumentFiles, 
     updateDocumentTags
 } from "../service";
+import { createUpdateDocumentSearchAction } from "../store/document-search.state";
 import { createUpdateDocumentAction } from "../store/document.state";
 
 export const mediateRequestDocument = (name) => async (dispatch) => {
     const document = await getDocument(name);
     document && dispatch(createUpdateDocumentAction(document));
+};
+
+export const mediateRequestSearchDocument = (query) => async (dispatch) => {
+    const res = await searchDocument(query);
+
+    res && res.success && dispatch(createUpdateDocumentSearchAction({
+        query,
+        result: res.documents
+    }));
 };
 
 export const mediateSubmitNewDocument = (name, files, callback) => async (dispatch) => {

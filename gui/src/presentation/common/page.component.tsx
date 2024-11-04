@@ -5,9 +5,7 @@ export const Page = (props: any) => {
     return (
         <>
         <MainNav />
-        <div className="m-3">
-            <Component />
-        </div>
+        <Component />
         </>
     );
 };

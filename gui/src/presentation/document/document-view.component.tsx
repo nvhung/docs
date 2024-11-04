@@ -26,31 +26,31 @@ export const DocumentView = () => {
     };
 
     return (
-        <>
-        <div className="fw-bold fs-4 mb-3 d-flex">
-            <label className="flex-fill">{document.name}</label>
-            <button type="button" className={`btn btn-success me-2 ${document.name ? '' : 'd-none'}`} onClick={handleClickEdit}>
-                <FontAwesomeIcon icon={faEdit} className="me-1" />
-                Edit
-            </button>
-            <button type="button" className={`btn btn-success me-2 ${document.name ? '' : 'd-none'}`} onClick={handleClickEdit}>
-                <FontAwesomeIcon icon={faRemove} className="me-1" />
-                Remove
-            </button>
-            <button type="button" className={`btn btn-success me-2 ${document.name ? '' : 'd-none'}`} onClick={handleClickEdit}>
-                <FontAwesomeIcon icon={faPlus} className="me-1" />
-                Create
-            </button>
+        <div className='m-3'>
+            <div className="fw-bold fs-4 mb-3 d-flex">
+                <label className="flex-fill">{document.name}</label>
+                <button type="button" className={`btn btn-success me-2 ${document.name ? '' : 'd-none'}`} onClick={handleClickEdit}>
+                    <FontAwesomeIcon icon={faEdit} className="me-1" />
+                    Edit
+                </button>
+                <button type="button" className={`btn btn-success me-2 ${document.name ? '' : 'd-none'}`} onClick={handleClickEdit}>
+                    <FontAwesomeIcon icon={faRemove} className="me-1" />
+                    Remove
+                </button>
+                <button type="button" className={`btn btn-success me-2 ${document.name ? '' : 'd-none'}`} onClick={handleClickEdit}>
+                    <FontAwesomeIcon icon={faPlus} className="me-1" />
+                    Create
+                </button>
+            </div>
+            <Section label='Files'>
+                <Files className="ms-3 mb-3" document={document} mode={ComponentMode.VIEW} />
+            </Section>
+            <Section label='Details' visible={!!document.name}>
+                <Details className='ms-3 mb-3' mode={ComponentMode.VIEW} />
+            </Section>
+            <Section label='Tags' visible={!!document.name}>
+                <Tags className='ms-3 mb-3' mode={ComponentMode.VIEW} />
+            </Section>
         </div>
-        <Section label='Files'>
-            <Files className="ms-3 mb-3" document={document} mode={ComponentMode.VIEW} />
-        </Section>
-        <Section label='Details' visible={!!document.name}>
-            <Details className='ms-3 mb-3' mode={ComponentMode.VIEW} />
-        </Section>
-        <Section label='Tags' visible={!!document.name}>
-            <Tags className='ms-3 mb-3' mode={ComponentMode.VIEW} />
-        </Section>
-        </>
     );
 };

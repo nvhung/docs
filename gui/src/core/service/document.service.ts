@@ -2,6 +2,8 @@ import { del, get, post, put } from "./request";
 
 export const getDocument = async (id: any) => get(`/api/document/${id}`);
 
+export const searchDocument = (query) => post(`/api/document/search`, query);
+
 export const createDocument = (files) => {
     const formData = new FormData();
     files.forEach((file, index) => {

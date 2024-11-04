@@ -1,6 +1,7 @@
 import { encode } from 'urlencode';
-import { createDocument, getDocument, removeDocumentDetail, updateDocumentDetail, updateDocumentFiles, updateDocumentTags } from "../service";
-import { getDocumentDirectory } from '../util';
+import { createDocument, getDocument, removeDocumentDetail, searchDocuments, updateDocumentDetail, updateDocumentFiles, updateDocumentTags } from "../service";
+import { getDocumentDirectory, getDocumentSearchResult } from '../util';
+import { findDocuments } from '../db';
 
 export const documentRoutes = (app, options) => {
     app.post('/api/document', {}, async (request, reply) => {
@@ -10,6 +11,14 @@ export const documentRoutes = (app, options) => {
             document: {
                 name: docName
             },
+            success: true
+        });
+    });
+
+    app.post('/api/document/search', {}, async (request, reply) => {
+        const documents = await searchDocuments(request.body);
+        reply.send({
+            documents,
             success: true
         });
     });

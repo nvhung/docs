@@ -9,7 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createUpdateDocumentAction, selectDocument } from "../../core/store/document.state";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCancel, faPlus, faTrash, faUndo } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash, faUndo } from "@fortawesome/free-solid-svg-icons";
 import { equals } from '../../core/utils';
 import { Section } from "./section.component";
 
@@ -53,7 +53,7 @@ export const Document = () => {
     }, [document]);
 
     return (
-        <div>
+        <div className="m-3">
             <div className="fw-bold fs-4 mb-3 d-flex">
                 <label className="flex-fill">{document && document.name ? document.name : 'New Document'}</label>
                 <button type="button" className={`btn btn-success me-2 ${documentName ? '' : 'd-none'}`} onClick={handleClickCancel}>

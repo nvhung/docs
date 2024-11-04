@@ -74,6 +74,10 @@ export const findDocument = async ({name}) => {
     return await Document.findOne({name});
 };
 
+export const findDocuments = async (query) => {
+    return await Document.find(query);
+};
+
 export const updateDocumentFiles = async ({name, files}) => {
     const doc = await findDocument({name});
     await Document.updateOne({name}, {$set: {files}});

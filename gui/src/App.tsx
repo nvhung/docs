@@ -19,6 +19,14 @@ const createRouter = () => createBrowserRouter([
     element: <Page renderer={() => <Dashboard />} />,
   },
   {
+    path: MainNavItemPath[MainNavItem.DASHBOARD],
+    element: <Page renderer={() => <Dashboard />} />,
+  },
+  {
+    path: MainNavItemPath[MainNavItem.DASHBOARD] + '/*',
+    element: <Page renderer={() => <Dashboard />} />,
+  },
+  {
     path: MainNavItemPath[MainNavItem.DOCUMENT],
     element: <Page renderer={() => <Document />} />,
   },

@@ -4,7 +4,7 @@ import { mkdir, stat, readdir, unlink } from 'node:fs/promises';
 import { pipeline } from 'node:stream/promises';
 import * as moment from 'moment';
 import * as db from '../db';
-import { equals, getDocumentDirectory, includes, without } from '../util';
+import { equals, getDbDocumentQuery, getDocumentDirectory, getDocumentSearchResult, includes, without } from '../util';
 
 export const createDocument = async (files) => {
     const date = moment().format('YYYY.MM.DD');
@@ -41,6 +41,14 @@ export const updateDocumentFiles = async ({name, files}) => {
 
 export const getDocument = async ({name}) => {
     return await db.findDocument({name});
+};
+
+export const searchDocuments = async (query) => {
+    console.log(`search document query: ${query}`);
+    const dbQuery = getDbDocumentQuery(query);
+    console.log(`db document query: ${dbQuery}`);
+    const docs = await db.findDocuments(dbQuery);
+    return getDocumentSearchResult(docs);
 };
 
 export const updateDocumentDetail = async ({name, detail}) => {
